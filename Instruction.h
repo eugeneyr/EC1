@@ -7,7 +7,7 @@
 
 class Instruction {
 public:
-    virtual void execute(CPU& cpu, RAM& ram) const = 0;
+    virtual void execute(uint16_t inst_start, uint16_t inst_end, CPU& cpu, RAM& ram) const = 0;
     virtual bool is_full_word() const = 0;
 
     static Instruction& get_instruction(uint16_t inst_start, uint16_t inst_end = 0u);
@@ -17,6 +17,5 @@ public:
 
     virtual ~Instruction();
 };
-
 
 #endif //EC1_INSTRUCTION_H

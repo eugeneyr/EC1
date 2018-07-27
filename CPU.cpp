@@ -13,12 +13,9 @@ CPU& CPU::get_instance() {
 void CPU::step() {
     decltype(auto) ram = RAM::get_instance();
     decltype(auto) instruction_start = (uint16_t) (ram.read_halfword(ilc++));
-    uint16_t instruction_end = 0;
-    if (Instruction::is_full_word(instruction_start)) {
-        instruction_end = (uint16_t) (ram.read_halfword(ilc));
-    }
+    auto instruction_end = (uint16_t) (Instruction::is_full_word(instruction_start) ? ram.read_halfword(ilc) : 0);
     decltype(auto) instruction = Instruction::get_instruction(instruction_start, instruction_end);
-    instruction.execute(*this, ram);
+    instruction.execute(instruction_start, instruction_end, *this, ram);
 }
 
 void CPU::main_loop() {
